@@ -1,164 +1,76 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include<stdio.h> 
+#include<stdlib.h> 
+#include<errno.h> 
+#include<sys/utsname.h>
+#include<unistd.h>
+#include <linux/kernel.h>
+#include <sys/sysinfo.h>
 #include <string.h>
-#include "file.h"
-#include "menu.h"
 
-int main(int argc, char *argv[])
-{
-    int running = 1;
-    long choice;
-    while(running)
-    {
-        choice = menu(choice);
-        switch(choice)
-        {
-            case 1:
-                addFriend();
-                break;
-                
-            case 2:
-                removeFriend();
-                break;
-                
-            case 3:
-                showFriendlist();
-                break;
-                
-            case 4:
-                running = 0;
-                break;
-                
-            default:
-                printf("Please try again.\n");
-                break;
-        }
-    }
-    return 0;
-}
+//prototype
+long get_uptime();
 
-void viderBuffer()
-{
-    int c = 0;
-    while (c != '\n' && c != EOF)
-    {
-        c = getchar();
-    }
-}
- 
-int lire(char *chaine, int longueur)
-{
-    char *positionEntree = NULL;
- 
-    if (fgets(chaine, longueur, stdin) != NULL)
-    {
-        positionEntree = strchr(chaine, '\n');
-        if (positionEntree != NULL)
-        {
-            *positionEntree = '\0';
-        }
-        else
-        {
-            viderBuffer();
-        }
-        return 1;
-    }
-    else
-    {
-        viderBuffer();
-        return 0;
-    }
-}
+int main() 
+{ 
+  struct utsname buf1; 
+  errno =0;
 
-long lireLong()
-{
-    char nombreTexte[100] = {0};
-
-    if (lire(nombreTexte, 100))
-    {
-        return strtol(nombreTexte, NULL, 10);
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-long menu(long choice)
-{
-    printf("1 - Add friend\n2 - Remove Friend\n3 - Show Friendlist\n4 - exit\n\nEnter choice: ");
-    choice = lireLong();
-    return choice;
-    
-}
-
-void addFriend()
-{
-    FILE* file = NULL;
-    file = fopen("friend.list","a");
+   if(uname(&buf1)!=0) 
+   { 
+      perror("uname doesn't return 0, so there is an error"); 
+      exit(EXIT_FAILURE); 
+   }
+  
+  //get username
+  char *name=getenv("USER");
+    if(name==NULL) return EXIT_FAILURE;
+  
+  //get uptime
+  long uptime = get_uptime();
+  
+  //get number of processors
+  long number_of_processors = sysconf(_SC_NPROCESSORS_ONLN);
+  
+  //get cpu temp
+  FILE* file = NULL;
+    file = fopen("/sys/class/thermal/thermal_zone0/temp","r");
+    char temp[20] = "";
     if (file != NULL)
     {
-        char friend[20];
-        printf("Enter friend's name: ");
-        fgets(friend,20, stdin);
-        fseek(file, SEEK_END, SEEK_CUR);
-        fputs(friend, file);
-    }
-    else
-    {
-        printf("Fichier est nul ou jsp bref ca marche pas\n");
-    }
-    fclose(file);
-}
-
-void removeFriend()
-{
-    showFriendlist();
-    printf("Select friend you want to remove: ");
-    long choice = 0;
-    choice = lireLong();
-    FILE* file = NULL;
-    file = fopen("friend.list","r");
-    FILE* file2 = NULL;
-    file2 = fopen("replica.list", "w");
-    char ch;
-    int temp = 1;
-    ch = getc(file);
-    while (ch != EOF)
-        {
-            ch = getc(file);
-            if (ch == '\n')
-                temp++;
-            if (temp != choice)
-                {
-                    putc(ch, file2);
-                }
-        }
-    fclose(file);
-    fclose(file2);
-    remove("friend.list");
-    rename("replica.list", "friend.list");
-}
-
-void showFriendlist()
-{
-    FILE* file = NULL;
-    file = fopen("friend.list","r");
-    if (file != NULL)
-    {
-        char string[20] = "";
         int i = 1;
-        printf("Friendlist: \n");
-        while(fgets(string, 20, file) != NULL)
-        {
-            printf("%d - %s",i ,string);
-            i++;
-        }
-        printf("\n");
+        fgets(temp, 20, file);
     }
     else
     {
         printf("Fichier est nul ou jsp bref ca marche pas\n");
     }
     fclose(file);
+  
+  //print title
+  printf("%s@%s\n\n", name, buf1.nodename);
+  
+  //print OS
+  printf("OS: %s %s\n", buf1.sysname, buf1.machine);
+  
+  //print kernel
+  printf("Kernel: %s\n", buf1.release);
+  
+  //print uptime
+  printf("Uptime: %ld mins\n", uptime/60);
+  
+  //print cpu info
+  printf("(%ld) %d°C\n", number_of_processors, atoi(temp)/1000);
+  
+  return 0;
+} 
+
+long get_uptime()
+{
+    struct sysinfo s_info;
+    int error = sysinfo(&s_info);
+    if(error != 0)
+    {
+        printf("code error = %d\n", error);
+    }
+    return s_info.uptime;
 }
