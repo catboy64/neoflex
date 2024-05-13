@@ -50,6 +50,7 @@ int main()
     FILE* file2 = fopen("/proc/cpuinfo", "r");
     char line[256];
     int i = 0;
+    char cpu_name[100];
     while (fgets(line, sizeof(line), file2))
     {
         i++;
@@ -58,12 +59,55 @@ int main()
             int i2 = 13;
             while(line[i2] != EOF)
             {
-                printf("%c", line[i2]);
+                cpu_name[i2-13] = line[i2];
                 i2++;
             }
         }
     }
     fclose(file2);
+    cpu_name[strlen(cpu_name)-1] = '\0';
+    
+    //get mem_total
+    FILE* file3 = fopen("/proc/meminfo", "r");
+    char line2[256];
+    i = 0;
+    char mem_total[100];
+    while (fgets(line2, sizeof(line2), file3))
+    {
+        i++;
+        if(i==1)
+        {
+            int i2 = 16;
+            while(line2[i2] != EOF)
+            {
+                mem_total[i2-16] = line2[i2];
+                i2++;
+            }
+        }
+    }
+    fclose(file3);
+    mem_total[strlen(mem_total)-4] = '\0';
+    
+    //get mem_free
+    FILE* file4 = fopen("/proc/meminfo", "r");
+    char line3[256];
+    i = 0;
+    char mem_free[100];
+    while (fgets(line3, sizeof(line3), file4))
+    {
+        i++;
+        if(i==3)
+        {
+            int i2 = 16;
+            while(line3[i2] != EOF)
+            {
+                mem_free[i2-16] = line3[i2];
+                i2++;
+            }
+        }
+    }
+    fclose(file4);
+    mem_free[strlen(mem_free)-4] = '\0';
   
   //print title
   printf("%s@%s\n\n", name, buf1.nodename);
@@ -78,7 +122,10 @@ int main()
   printf("Uptime: %ld mins\n", uptime/60);
   
   //print cpu info
-  printf("(%ld) %d°C\n", number_of_processors, atoi(temp)/1000);
+  printf("CPU: %s (%ld) %d°C\n",cpu_name, number_of_processors, atoi(temp)/1000);
+  
+  //print mem info
+  printf("Memory: %d/%s kB\n", (atoi(mem_total)-atoi(mem_free)), mem_total);
   
   return 0;
 } 
