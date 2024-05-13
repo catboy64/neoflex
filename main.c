@@ -45,6 +45,25 @@ int main()
         printf("Fichier est nul ou jsp bref ca marche pas\n");
     }
     fclose(file);
+    
+    //get cpu stuff idk je suis fatigue calisse
+    FILE* file2 = fopen("/proc/cpuinfo", "r");
+    char line[256];
+    int i = 0;
+    while (fgets(line, sizeof(line), file2))
+    {
+        i++;
+        if(i==5)
+        {
+            int i2 = 13;
+            while(line[i2] != EOF)
+            {
+                printf("%c", line[i2]);
+                i2++;
+            }
+        }
+    }
+    fclose(file2);
   
   //print title
   printf("%s@%s\n\n", name, buf1.nodename);
