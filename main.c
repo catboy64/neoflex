@@ -9,7 +9,9 @@
 
 //prototype
 long get_uptime();
+void print_info(int i);
 
+//main function
 int main() 
 { 
   struct utsname buf1; 
@@ -108,24 +110,55 @@ int main()
     }
     fclose(file4);
     mem_free[strlen(mem_free)-4] = '\0';
-  
-  //print title
-  printf("%s@%s\n\n", name, buf1.nodename);
-  
-  //print OS
-  printf("OS: %s %s\n", buf1.sysname, buf1.machine);
-  
-  //print kernel
-  printf("Kernel: %s\n", buf1.release);
-  
-  //print uptime
-  printf("Uptime: %ld mins\n", uptime/60);
-  
-  //print cpu info
-  printf("CPU: %s (%ld) %d°C\n",cpu_name, number_of_processors, atoi(temp)/1000);
-  
-  //print mem info
-  printf("Memory: %d/%s kB\n", (atoi(mem_total)-atoi(mem_free)), mem_total);
+
+  //print ascii
+  FILE* fileAscii = NULL;
+    fileAscii = fopen("linux.ascii","r");
+    if (file != NULL)
+    {
+        char string[50] = "";
+        int i = 1;
+        printf("\n");
+        while(fgets(string, 50, fileAscii) != NULL)
+        {
+            printf("\033[0;36m%.*s\033[0m" ,strlen(string)-1, string);
+            switch (i)
+            {
+                case 1:
+                    printf(" \033[0;36m%s\033[0m@\033[0;36m%s\033[0m\n", name, buf1.nodename);
+                    break;
+                case 2:
+                    printf("      -----------\n");
+                    break;
+                case 3:
+                    printf(" \033[0;36mOS\033[0m: %s %s\n", buf1.sysname, buf1.machine);
+                    break;
+                case 4:
+                    printf(" \033[0;36mKernel\033[0m: %s\n", buf1.release);
+                    break;
+                case 5:
+                    printf(" \033[0;36mUptime\033[0m: %ld mins\n", uptime/60);
+                    break;
+                case 6:
+                    printf(" \033[0;36mCPU\033[0m: %s (%ld) %d°C\n",cpu_name, number_of_processors, atoi(temp)/1000);
+                    break;
+                case 7:
+                    printf(" \033[0;36mMemory\033[0m: %d/%s kB\n", (atoi(mem_total)-atoi(mem_free)), mem_total);
+                    break;
+                case 8:
+                    printf("\n");
+                    break;
+
+            }
+            i++;
+        }
+        printf("\n");
+    }
+    else
+    {
+        printf("Fichier est nul ou jsp bref ca marche pas\n");
+    }
+    fclose(fileAscii);
   
   return 0;
 } 
