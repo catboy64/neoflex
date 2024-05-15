@@ -128,7 +128,7 @@ int main()
                     printf(" \033[0;36m%s\033[0m@\033[0;36m%s\033[0m\n", name, buf1.nodename);
                     break;
                 case 2:
-                    printf("      -----------\n");
+                    printf("      ---------\n");
                     break;
                 case 3:
                     printf(" \033[0;36mOS\033[0m: %s %s\n", buf1.sysname, buf1.machine);
