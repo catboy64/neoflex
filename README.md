@@ -1,3 +1,4 @@
 # neoflex
 tu flex avec ton neofetch, moi je gatekeep neoflex
-![image](https://github.com/catboy64/neoflex/assets/153577622/b9a3ca22-45bb-4032-9fb0-873165018087)
+![image](https://github.com/catboy64/neoflex/assets/153577622/82c46885-d14f-45ea-adb6-b88b6205d601)
+
