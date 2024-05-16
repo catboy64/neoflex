@@ -143,7 +143,7 @@ int main()
                     printf(" \033[0;36mCPU\033[0m: %s (%ld) %d°C\n",cpu_name, number_of_processors, atoi(temp)/1000);
                     break;
                 case 7:
-                    printf(" \033[0;36mMemory\033[0m: %d/%s kB\n", (atoi(mem_total)-atoi(mem_free)), mem_total);
+                    printf(" \033[0;36mMemory\033[0m: %d/%d mib\n", (atoi(mem_total)-atoi(mem_free))/1024, atoi(mem_total)/1024);
                     break;
                 case 8:
                     printf("\n");
