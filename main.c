@@ -9,7 +9,7 @@
 
 //prototype
 long get_uptime();
-void print_info(int i);
+int get_temp();
 
 //main function
 int main() 
@@ -32,21 +32,10 @@ int main()
   
   //get number of processors
   long number_of_processors = sysconf(_SC_NPROCESSORS_ONLN);
+
+  //get temp
+  int temp = get_temp();
   
-  //get cpu temp
-  FILE* file = NULL;
-    file = fopen("/sys/class/thermal/thermal_zone0/temp","r");
-    char temp[20] = "";
-    if (file != NULL)
-    {
-        int i = 1;
-        fgets(temp, 20, file);
-    }
-    else
-    {
-        printf("Fichier est nul ou jsp bref ca marche pas\n");
-    }
-    fclose(file);
     
     //get cpu stuff idk je suis fatigue calisse
     FILE* file2 = fopen("/proc/cpuinfo", "r");
@@ -114,7 +103,7 @@ int main()
   //print ascii
   FILE* fileAscii = NULL;
     fileAscii = fopen("linux.ascii","r");
-    if (file != NULL)
+    if (fileAscii != NULL)
     {
         char string[50] = "";
         int i = 1;
@@ -140,7 +129,7 @@ int main()
                     printf(" \033[0;36mUptime\033[0m: %ld mins\n", uptime/60);
                     break;
                 case 6:
-                    printf(" \033[0;36mCPU\033[0m: %s (%ld) %d°C\n",cpu_name, number_of_processors, atoi(temp)/1000);
+                    printf(" \033[0;36mCPU\033[0m: %s (%ld) %d°C\n",cpu_name, number_of_processors, temp/1000);
                     break;
                 case 7:
                     printf(" \033[0;36mMemory\033[0m: %d/%d mib\n", (atoi(mem_total)-atoi(mem_free))/1024, atoi(mem_total)/1024);
@@ -173,3 +162,23 @@ long get_uptime()
     }
     return s_info.uptime;
 }
+
+int get_temp()
+{
+    FILE* file = NULL;
+    file = fopen("/sys/class/thermal/thermal_zone0/temp","r");
+    char temp[20] = "";
+    if (file != NULL)
+    {
+        int i = 1;
+        fgets(temp, 20, file);
+    }
+    else
+    {
+        printf("Fichier est nul ou jsp bref ca marche pas\n");
+    }
+    fclose(file);
+    return atoi(temp);
+
+}
+
