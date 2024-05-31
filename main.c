@@ -99,7 +99,7 @@ int main()
   //print ascii
   FILE* fileAscii = NULL;
     fileAscii = fopen("linux.ascii","r");
-    if (file != NULL)
+    if (fileAscii != NULL)
     {
         char string[50] = "";
         int i = 1;
@@ -125,7 +125,7 @@ int main()
                     printf(" \033[0;36mUptime\033[0m: %ld mins\n", uptime/60);
                     break;
                 case 6:
-                    printf(" \033[0;36mCPU\033[0m: %s (%ld)\n",cpu_name, number_of_processors;
+                    printf(" \033[0;36mCPU\033[0m: %s (%ld)\n",cpu_name, number_of_processors);
                     break;
                 case 7:
                     printf(" \033[0;36mMemory\033[0m: %d/%d mib\n", (atoi(mem_total)-atoi(mem_free))/1024, atoi(mem_total)/1024);
@@ -133,7 +133,6 @@ int main()
                 case 8:
                     printf("\n");
                     break;
-
             }
             i++;
         }
