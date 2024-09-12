@@ -3,9 +3,9 @@
 #include<errno.h> 
 #include<sys/utsname.h>
 #include<unistd.h>
-#include <linux/kernel.h>
-#include <sys/sysinfo.h>
-#include <string.h>
+#include<linux/kernel.h>
+#include<sys/sysinfo.h>
+#include<string.h>
 
 //prototype
 long get_uptime();
@@ -13,7 +13,7 @@ void print_info(int i);
 
 //main function
 int main() 
-{ 
+{
   struct utsname buf1; 
   errno =0;
 
@@ -96,9 +96,26 @@ int main()
     fclose(file4);
     mem_free[strlen(mem_free)-4] = '\0';
 
-  //print ascii
-  FILE* fileAscii = NULL;
-    fileAscii = fopen("linux.ascii","r");
+    //print ascii
+    FILE* fileAscii = NULL;
+
+    char *distroArch = strstr(buf1.release, "arch");
+    if(distroArch)
+        {
+            fileAscii = fopen("ascii/arch.ascii","r");
+        }
+    else
+    {
+	char *distroArch = strstr(buf1.release, "artix");
+		if (distroArch)
+		{
+			fileAscii = fopen("ascii/arch.ascii", "r");
+		}
+		else
+		{
+			fileAscii = fopen("ascii/linux.ascii", "r");
+		}
+    }
     if (fileAscii != NULL)
     {
         char string[50] = "";
@@ -128,7 +145,7 @@ int main()
                     printf(" \033[0;36mCPU\033[0m: %s (%ld)\n",cpu_name, number_of_processors);
                     break;
                 case 7:
-                    printf(" \033[0;36mMemory\033[0m: %d/%d mib\n", (atoi(mem_total)-atoi(mem_free))/1024, atoi(mem_total)/1024);
+                    printf(" \033[0;36mMemory\033[0m: %d/%d MiB\n", (atoi(mem_total)-atoi(mem_free))/1024, atoi(mem_total)/1024);
                     break;
                 case 8:
                     printf("\n");
@@ -137,10 +154,12 @@ int main()
             i++;
         }
         printf("\n");
+
+
     }
     else
     {
-        printf("Fichier est nul ou jsp bref ca marche pas\n");
+        printf("Error - ASCII file not detected\n");
     }
     fclose(fileAscii);
   
