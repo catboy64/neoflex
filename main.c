@@ -102,18 +102,18 @@ int main()
     char *distroArch = strstr(buf1.release, "arch");
     if(distroArch)
         {
-            fileAscii = fopen("ascii/arch.ascii","r");
+            fileAscii = fopen("arch.ascii","r");
         }
     else
     {
 	char *distroArch = strstr(buf1.release, "artix");
 		if (distroArch)
 		{
-			fileAscii = fopen("ascii/arch.ascii", "r");
+			fileAscii = fopen("arch.ascii", "r");
 		}
 		else
 		{
-			fileAscii = fopen("ascii/linux.ascii", "r");
+			fileAscii = fopen("linux.ascii", "r");
 		}
     }
     if (fileAscii != NULL)
