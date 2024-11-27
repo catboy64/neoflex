@@ -106,17 +106,21 @@ int main()
     //print ascii
     FILE* fileAscii = NULL;
 
+    // ARCH
     char *distroArch = strstr(line1_distro, "Arch");
     if(distroArch)
         {
             fileAscii = fopen("arch.ascii","r");
         }
+    // ARTIX
     else if (strstr(line1_distro, "Artix")) {
         char *distroArch = strstr(line1_distro, "Artix");
 		if (distroArch)
 		{
 			fileAscii = fopen("arch.ascii", "r");
 		}
+    // MINT
+    }
     else if (strstr(line1_distro, "Mint")) {
         char *distroArch = strstr(line1_distro, "Mint");
 		if (distroArch)
@@ -124,6 +128,7 @@ int main()
 			fileAscii = fopen("mint.ascii", "r");
 		}
     }
+    // KALI
     else if (strstr(line1_distro, "Kali")) {
         char *distroArch = strstr(line1_distro, "Kali");
 		if (distroArch)
@@ -184,7 +189,6 @@ int main()
   
   return 0;
 }
-} // ???????????????????????????
 
 long get_uptime()
 {
@@ -196,3 +200,4 @@ long get_uptime()
     }
     return s_info.uptime;
 }
+
