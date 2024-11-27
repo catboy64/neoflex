@@ -33,7 +33,7 @@ int main()
   //get number of processors
   long number_of_processors = sysconf(_SC_NPROCESSORS_ONLN);
     
-    //get cpu stuff idk je suis fatigue calisse
+    //get cpu stuff idk je suis fatigue
     FILE* file2 = fopen("/proc/cpuinfo", "r");
     char line[256];
     int i = 0;
@@ -96,17 +96,24 @@ int main()
     fclose(file4);
     mem_free[strlen(mem_free)-4] = '\0';
 
+    // get the distro name
+    //get mem_free
+    FILE* file_distro = fopen("/etc/os-release", "r");
+    char line1_distro[50];
+    fgets(line1_distro, 50, file_distro);
+
+
     //print ascii
     FILE* fileAscii = NULL;
 
-    char *distroArch = strstr(buf1.release, "arch");
+    char *distroArch = strstr(line1_distro, "Arch");
     if(distroArch)
         {
             fileAscii = fopen("arch.ascii","r");
         }
-    else
+    else 
     {
-	char *distroArch = strstr(buf1.release, "artix");
+	char *distroArch = strstr(line1_distro, "Artix");
 		if (distroArch)
 		{
 			fileAscii = fopen("arch.ascii", "r");
@@ -116,6 +123,7 @@ int main()
 			fileAscii = fopen("linux.ascii", "r");
 		}
     }
+
     if (fileAscii != NULL)
     {
         char string[50] = "";
@@ -154,7 +162,6 @@ int main()
             i++;
         }
         printf("\n");
-
 
     }
     else
