@@ -124,6 +124,13 @@ int main()
 			fileAscii = fopen("mint.ascii", "r");
 		}
     }
+    else if (strstr(line1_distro, "Kali")) {
+        char *distroArch = strstr(line1_distro, "Kali");
+		if (distroArch)
+		{
+			fileAscii = fopen("kali.ascii", "r");
+		}
+    }
 	else // if os not available
 	{
 			fileAscii = fopen("linux.ascii", "r");
