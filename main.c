@@ -111,18 +111,23 @@ int main()
         {
             fileAscii = fopen("arch.ascii","r");
         }
-    else 
-    {
-	char *distroArch = strstr(line1_distro, "Artix");
+    else if (strstr(line1_distro, "Artix")) {
+        char *distroArch = strstr(line1_distro, "Artix");
 		if (distroArch)
 		{
 			fileAscii = fopen("arch.ascii", "r");
 		}
-		else
+    else if (strstr(line1_distro, "Mint")) {
+        char *distroArch = strstr(line1_distro, "Mint");
+		if (distroArch)
 		{
-			fileAscii = fopen("linux.ascii", "r");
+			fileAscii = fopen("mint.ascii", "r");
 		}
     }
+	else // if os not available
+	{
+			fileAscii = fopen("linux.ascii", "r");
+	}
 
     if (fileAscii != NULL)
     {
@@ -171,7 +176,8 @@ int main()
     fclose(fileAscii);
   
   return 0;
-} 
+}
+} // ???????????????????????????
 
 long get_uptime()
 {
